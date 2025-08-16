@@ -47,7 +47,7 @@ int main()
                 if (NewNode == end)
                 {
                     std::cout << NewX << ',' << NewY << std::endl;
-                    std::cout << "AAAAAAAAAA" << std::endl;
+                    std::cout << "AAAA" << std::endl;
                     break;
                 }
                 queue.push(NewNode);
