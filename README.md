@@ -1,7 +1,5 @@
 # CPP PROJECTS
 
-CPP PROJECTS
-
 Welcome to CPP PROJECTS — a personal collection of small C++ projects I'm building for fun and learning. This repository is just getting started and currently includes one project in progress.
 
 📁 Current Project
