@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iostream>
 #include <queue>
 #include <set>
@@ -8,9 +9,10 @@ const int COL{4};
 
 int main()
 {
+    // PATH: START & END
     std::pair<int, int> source{0, 0};
-    std::pair<int, int> end{2, 2};
-
+    std::pair<int, int> end{3, 2};
+    // GRID (GRAPH DS)
     std::vector<std::vector<int>> grid(ROW, std::vector<int>(COL));
     // QUEUE
     std::queue<std::pair<int, int>> queue;
@@ -21,10 +23,13 @@ int main()
     // PARENT
     std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> parent;
     parent.push_back({source, source});
-
+    // DIRECTIONS
     std::vector<std::pair<int, int>> directions{{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+    // PATH
 
-    while (!queue.empty())
+    // BSF START
+    bool found{false};
+    while (!queue.empty() && !found)
     {
         std::pair current = queue.front();
         queue.pop();
@@ -34,28 +39,53 @@ int main()
             std::cout << "Found the end!" << std::endl;
             break;
         }
-        int NewX{current.first};
-        int NewY{current.second};
         for (const auto &dir : directions)
         {
-            NewX += dir.first;
-            NewY += dir.second;
+            int NewX = current.first + dir.first;
+            int NewY = current.second + dir.second;
             std::pair NewNode{NewX, NewY};
             if (NewX <= ROW && NewX >= 0 && NewY <= COL && NewY >= 0 &&
                 visited.find(NewNode) == visited.end())
             {
-                if (NewNode == end)
-                {
-                    std::cout << NewX << ',' << NewY << std::endl;
-                    std::cout << "AAA" << std::endl;
-                    break;
-                }
                 queue.push(NewNode);
                 visited.insert(NewNode);
                 parent.push_back({current, NewNode});
-                std::cout << NewX << ',' << NewY << std::endl;
+
+                if (NewNode == end)
+                {
+                    found = true;
+                    std::cout << "Found the end!" << std::endl;
+                    break;
+                }
             }
         }
+    }
+
+    std::vector<std::pair<int, int>> path;
+    std::pair<int, int> current{end};
+    // CREATE FASTEST PATH TO END
+    while (current != source)
+    {
+        path.push_back(current);
+        for (int i{}; i < path.size(); ++i)
+        {
+            for (const auto &c : parent)
+            {
+                if (current == c.second)
+                {
+                    current = c.first;
+                    break;
+                }
+            }
+            break;
+        }
+    }
+    path.push_back(source);
+    std::reverse(path.begin(), path.end());
+
+    for (auto const &step : path)
+    {
+        std::cout << step.first << ',' << step.second << std::endl;
     }
     return 0;
 }
