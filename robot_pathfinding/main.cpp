@@ -6,6 +6,7 @@
 
 const int ROW{10};
 const int COL{10};
+bool found{false};
 
 void printGrid(int r, int c)
 {
@@ -20,10 +21,12 @@ void printGrid(int r, int c)
 void BSF(std::pair<int, int> &source, std::pair<int, int> &end,
          std::queue<std::pair<int, int>> &queue, std::vector<std::pair<int, int>> &directions,
          std::set<std::pair<int, int>> &visited,
-         std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> &parent)
+         std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> &parent,
+         std::vector<std::vector<int>> grid)
 {
-    bool found{false};
-    while (!queue.empty() && !found)
+
+    bool blocked{false};
+    while (!queue.empty() && !(found && blocked))
     {
         std::pair current = queue.front();
         queue.pop();
@@ -38,17 +41,24 @@ void BSF(std::pair<int, int> &source, std::pair<int, int> &end,
             int NewX = current.first + dir.first;
             int NewY = current.second + dir.second;
             std::pair NewNode{NewX, NewY};
-            if (NewX <= ROW && NewX >= 0 && NewY <= COL && NewY >= 0 &&
+            if (NewX < ROW && NewX >= 0 && NewY < COL && NewY >= 0 &&
                 visited.find(NewNode) == visited.end())
             {
-                queue.push(NewNode);
-                visited.insert(NewNode);
-                parent.push_back({current, NewNode});
-
-                if (NewNode == end)
+                if (!grid[NewX][NewY])
                 {
-                    found = true;
-                    std::cout << "Found the end!" << std::endl;
+                    queue.push(NewNode);
+                    visited.insert(NewNode);
+                    parent.push_back({current, NewNode});
+
+                    if (NewNode == end)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                else
+                {
+                    std::cout << "No end could be found. The way is blocked." << std::endl;
                     break;
                 }
             }
@@ -93,7 +103,7 @@ int main()
     std::pair<int, int> end{4, 8};
     // GRID (GRAPH DS)
     std::vector<std::vector<int>> grid(ROW, std::vector<int>(COL));
-    // QUEUE
+    //  QUEUE
     std::queue<std::pair<int, int>> queue;
     queue.push(source);
     // VISITED
@@ -106,12 +116,13 @@ int main()
     std::vector<std::pair<int, int>> directions{{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
 
     // BSF START
-    BSF(source, end, queue, directions, visited, parent);
+    BSF(source, end, queue, directions, visited, parent, grid);
 
     // PATH
     std::vector<std::pair<int, int>> path;
     std::pair<int, int> current{end};
-    pathReconstruction(path, current, source, parent);
+    if (found)
+        pathReconstruction(path, current, source, parent);
 
     return 0;
 }
