@@ -4,30 +4,24 @@
 #include <set>
 #include <vector>
 
-const int ROW{4};
-const int COL{4};
+const int ROW{10};
+const int COL{10};
 
-int main()
+void printGrid(int r, int c)
 {
-    // PATH: START & END
-    std::pair<int, int> source{0, 0};
-    std::pair<int, int> end{3, 2};
-    // GRID (GRAPH DS)
-    std::vector<std::vector<int>> grid(ROW, std::vector<int>(COL));
-    // QUEUE
-    std::queue<std::pair<int, int>> queue;
-    queue.push(source);
-    // VISITED
-    std::set<std::pair<int, int>> visited;
-    visited.insert(source);
-    // PARENT
-    std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> parent;
-    parent.push_back({source, source});
-    // DIRECTIONS
-    std::vector<std::pair<int, int>> directions{{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
-    // PATH
+    for (int i{}; i < r; ++i)
+    {
+        for (int j{}; j < c; ++j)
+            std::cout << '[' << i << ',' << j << ']';
+        std::cout << std::endl;
+    }
+}
 
-    // BSF START
+void BSF(std::pair<int, int> &source, std::pair<int, int> &end,
+         std::queue<std::pair<int, int>> &queue, std::vector<std::pair<int, int>> &directions,
+         std::set<std::pair<int, int>> &visited,
+         std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> &parent)
+{
     bool found{false};
     while (!queue.empty() && !found)
     {
@@ -60,10 +54,12 @@ int main()
             }
         }
     }
+}
 
-    std::vector<std::pair<int, int>> path;
-    std::pair<int, int> current{end};
-    // CREATE FASTEST PATH TO END
+void pathReconstruction(std::vector<std::pair<int, int>> &path, std::pair<int, int> &current,
+                        std::pair<int, int> &source,
+                        std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> &parent)
+{
     while (current != source)
     {
         path.push_back(current);
@@ -87,5 +83,35 @@ int main()
     {
         std::cout << step.first << ',' << step.second << std::endl;
     }
+}
+
+int main()
+{
+    printGrid(ROW, COL);
+    // PATH: START & END
+    std::pair<int, int> source{9, 3};
+    std::pair<int, int> end{4, 8};
+    // GRID (GRAPH DS)
+    std::vector<std::vector<int>> grid(ROW, std::vector<int>(COL));
+    // QUEUE
+    std::queue<std::pair<int, int>> queue;
+    queue.push(source);
+    // VISITED
+    std::set<std::pair<int, int>> visited;
+    visited.insert(source);
+    // PARENT
+    std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> parent;
+    parent.push_back({source, source});
+    // DIRECTIONS
+    std::vector<std::pair<int, int>> directions{{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+
+    // BSF START
+    BSF(source, end, queue, directions, visited, parent);
+
+    // PATH
+    std::vector<std::pair<int, int>> path;
+    std::pair<int, int> current{end};
+    pathReconstruction(path, current, source, parent);
+
     return 0;
 }
