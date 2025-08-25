@@ -36,12 +36,15 @@ void blockPath(std::vector<std::vector<int>> &grid)
         grid[randomBlock()][randomBlock()] = 1;
 }
 
-void printGrid(int r, int c)
+void printGrid(std::vector<std::vector<int>> &grid, int r, int c)
 {
     for (int i{}; i < r; ++i)
     {
         for (int j{}; j < c; ++j)
-            std::cout << '[' << i << ',' << j << ']';
+          if(grid[i][j] == 0)
+            std::cout << " * ";
+          else
+            std::cout << " # ";
         std::cout << std::endl;
     }
 }
@@ -134,8 +137,13 @@ int main()
     ps.parent.push_back({source, source});
 
     // PATHFINDING BSF START
-    printGrid(ROW, COL);
     blockPath(ps.grid);
+    printGrid(ps.grid, ROW, COL);
+    if(ps.grid[source.first][source.second] == 1)
+    {
+      std::cout << "The source is blocked" << std::endl;
+      return 0;
+    }
     BSF(source, end, ps.queue, ps.directions, ps.visited, ps.parent, ps.grid);
     if (found)
         pathReconstruction(ps.path, source, end, ps.parent);
