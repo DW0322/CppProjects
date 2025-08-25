@@ -1,38 +1,37 @@
-#include <cmath>
 #include <iostream>
 #include <vector>
+#include <cmath>
+
+struct Coords
+{
+  double x;
+  double y;
+};
 
 struct Joints
 {
-    double length{};
-    double angle{};
+  double length;
+  double angle;
+  Coords coords;
 };
 
-struct coords
+double degreeToRads(double angle)
 {
-    double x{};
-    double y{};
-};
-
-std::vector<std::vector<double>> rotationMatrix(double angle)
-{
-    return {{std::cos(angle), -std::sin(angle)}, {std::sin(angle), std::cos(angle)}};
+  return angle * (M_PI/180);
 }
 
-coords applyRotation(coords c, std::vector<std::vector<double>> r)
+Coords rotate(const Coords &arm, double angle)
 {
-    coords result{};
-    result.x = r[0][0] * c.x + r[1][0] * c.x;
-    result.y = r[1][1] * c.y + r[0][1] * c.y;
-    return result;
+  Coords NewCoords{};
+  NewCoords.x = arm.x * std::cos(angle) - std::sin(angle) * arm.y;
+  NewCoords.y = arm.x * std::sin(angle) + std::cos(angle) * arm.y;
+  return NewCoords;
 }
+
 int main()
 {
-    coords arm{2.0, 2.0};
-    Joints l1{10.0, 1.0};
-
-    coords r{applyRotation(arm, rotationMatrix(360.0))};
-    std::cout << r.x << ',' << r.y << std::endl;
-
-    return 0;
+  Joints l1 {10, 80, {1, 10.0}};
+  Coords NewArm {rotate(l1.coords, degreeToRads(l1.angle))};
+  std::cout << NewArm.x << ',' << NewArm.y << std::endl;
+  return 0;
 }
