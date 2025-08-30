@@ -1,31 +1,38 @@
 # CPP PROJECTS
 
-Welcome to CPP PROJECTS — a personal collection of small C++ projects I'm building for fun and learning. This repository is just getting started and currently includes one project in progress.
+Welcome to **CPP PROJECTS** — a personal collection of C++ projects I'm building for fun and learning. This repository has grown from simple simulations to more advanced explorations in robotics and computer graphics.
 
-📁 Current Project
+📁 Completed Project
 
-Robot Path Simulator (WIP)
-A simple simulation that uses Breadth-First Search (BFS) to find a path for a robot through a grid. The goal is to simulate how a robot can navigate from a start point to a target while avoiding obstacles.
+### ✅ Robot Path Simulator  
+A simple simulation that uses **Breadth-First Search (BFS)** to find a path for a robot through a grid. The simulation demonstrates how a robot can navigate from a start point to a target while avoiding obstacles.
 
-🚧 Work in Progress
+🛠 How to Run:
 
-This project is still under development. More features, improvements, and additional projects will be added over time.
+1. Make sure you have a C++ compiler installed (e.g., `g++`, `clang++`).
+2. Navigate to the project folder.
+3. Compile the code:
 
-🛠 How to Run
-
-Make sure you have a C++ compiler installed (e.g., g++, clang++).
-
-Navigate to the project folder.
-
-Compile the code:
-
-g++ robot_path_simulator.cpp -o robot_sim
-
+   ```bash
+   g++ robot_path_simulator.cpp -o robot_sim
 
 Run the program:
 
-./robot_sim
+  ./robot_sim
+
+
+📁 Current Project
+
+🤖 Forward Kinematics Robot Arm (2D → 3D)
+
+I'm currently working on simulating a 2D robotic arm using forward kinematics. This involves calculating joint positions based on given angles and segment lengths. The plan is to:
+
+Build an interactive 2D simulation.
+
+Extend it into 3D for more complex movement.
+
+Potentially visualize it using OpenGL for real-time rendering and interaction.
 
 📌 Notes
 
-These projects are made for learning and exploration. Feel free to explore the code, suggest improvements, or use it as inspiration.
+These projects are for learning, experimentation, and skill-building. Feel free to explore the code, suggest improvements, or use anything here as inspiration for your own work.
