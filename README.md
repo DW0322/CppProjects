@@ -15,11 +15,11 @@ A simple simulation that uses **Breadth-First Search (BFS)** to find a path for 
 
    ```bash
    g++ robot_path_simulator.cpp -o robot_sim
-
+   ```
 Run the program:
-
+   ```bash
   ./robot_sim
-
+   ```
 
 📁 Current Project
 
