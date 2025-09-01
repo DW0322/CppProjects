@@ -27,11 +27,11 @@ A simple simulation that uses **Breadth-First Search (BFS)** to find a path for 
 
 I'm currently working on simulating a 2D robotic arm using forward kinematics. This involves calculating joint positions based on given angles and segment lengths. The plan is to:
 
-Build an interactive 2D simulation.
+- Build an interactive 2D simulation.
 
-Extend it into 3D for more complex movement.
+- Extend it into 3D for more complex movement.
 
-Potentially visualize it using OpenGL for real-time rendering and interaction.
+- Potentially visualize it using OpenGL for real-time rendering and interaction.
 
 
 ## 📌 Notes
