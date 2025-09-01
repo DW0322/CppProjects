@@ -23,7 +23,6 @@ A simple simulation that uses **Breadth-First Search (BFS)** to find a path for 
 
 ## 📁 Current Project
 
->>>>>>> 9cea544 (updated README)
 ### 🤖 Forward Kinematics Robot Arm (2D → 3D)
 
 I'm currently working on simulating a 2D robotic arm using forward kinematics. This involves calculating joint positions based on given angles and segment lengths. The plan is to:
