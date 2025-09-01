@@ -18,13 +18,6 @@ A simple simulation that uses **Breadth-First Search (BFS)** to find a path for 
    ```
 4. Run the program:
    ```bash
-    ./robot_sim
-
-## 📁 Current Project
-
-<<<<<<< HEAD
-=======
-   ```bash
    ./robot_sim
    ```
 
@@ -41,10 +34,7 @@ Extend it into 3D for more complex movement.
 
 Potentially visualize it using OpenGL for real-time rendering and interaction.
 
-<<<<<<< HEAD
+
 ## 📌 Notes
-=======
-> ## [!NOTE]
->>>>>>> 9cea544 (updated README)
 
 These projects are for learning, experimentation, and skill-building. Feel free to explore the code, suggest improvements, or use anything here as inspiration for your own work.
