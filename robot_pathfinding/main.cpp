@@ -3,6 +3,7 @@
 #include <queue>
 #include <random>
 #include <set>
+#include <stack>
 #include <vector>
 
 const int ROW{5};
@@ -17,7 +18,7 @@ struct PathfindingState
     std::set<std::pair<int, int>> visited;
     std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> parent;
     const std::vector<std::pair<int, int>> directions{{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
-    std::vector<std::pair<int, int>> path;
+    std::stack<std::pair<int, int>> path;
 };
 
 int randomBlock()
@@ -41,10 +42,10 @@ void printGrid(std::vector<std::vector<int>> &grid, int r, int c)
     for (int i{}; i < r; ++i)
     {
         for (int j{}; j < c; ++j)
-          if(grid[i][j] == 0)
-            std::cout << " * ";
-          else
-            std::cout << " # ";
+            if (grid[i][j] == 0)
+                std::cout << " * ";
+            else
+                std::cout << " # ";
         std::cout << std::endl;
     }
 }
@@ -93,14 +94,14 @@ void BSF(const std::pair<int, int> &source, const std::pair<int, int> &end,
         std::cout << "Can't fint the end. The way must be blocked." << std::endl;
 }
 
-void pathReconstruction(std::vector<std::pair<int, int>> &path, const std::pair<int, int> &source,
+void pathReconstruction(std::stack<std::pair<int, int>> &path, const std::pair<int, int> &source,
                         const std::pair<int, int> &end,
                         std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> &parent)
 {
     std::pair<int, int> current{end};
     while (current != source)
     {
-        path.push_back(current);
+        path.push(current);
         for (int i{}; i < path.size(); ++i)
         {
             for (const auto &c : parent)
@@ -114,11 +115,12 @@ void pathReconstruction(std::vector<std::pair<int, int>> &path, const std::pair<
             break;
         }
     }
-    path.push_back(source);
-    std::reverse(path.begin(), path.end());
+    path.push(source);
 
-    for (auto const &step : path)
+    while (!path.empty())
     {
+        std::pair<int, int> step = path.top();
+        path.pop();
         std::cout << step.first << ',' << step.second << std::endl;
     }
 }
@@ -139,10 +141,10 @@ int main()
     // PATHFINDING BSF START
     blockPath(ps.grid);
     printGrid(ps.grid, ROW, COL);
-    if(ps.grid[source.first][source.second] == 1)
+    if (ps.grid[source.first][source.second] == 1)
     {
-      std::cout << "The source is blocked" << std::endl;
-      return 0;
+        std::cout << "The source is blocked" << std::endl;
+        return 0;
     }
     BSF(source, end, ps.queue, ps.directions, ps.visited, ps.parent, ps.grid);
     if (found)
