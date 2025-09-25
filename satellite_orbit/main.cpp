@@ -16,13 +16,31 @@
 constexpr double EARTH_MASS{5.972e24};       // kg
 constexpr double EARTH_RADIUS{6.371e6};      // m
 constexpr double GRAV_CONST{6.67430e-11};    // m^3 kg^-1 s^-2
-constexpr double SAT_MASS{3000.0};           // kg
-constexpr double DISTANCE_SURFACE{3.5786e7}; // m from earth surface
+constexpr double DISTANCE_SURFACE{400000.0}; // m from earth surface
 constexpr double DISTANCE_CENTER = (DISTANCE_SURFACE + EARTH_RADIUS);
 
-constexpr double vectorToEarth(double r)
+struct Vector
 {
-    return -(GRAV_CONST * EARTH_MASS / (r * r));
+    double x{};
+    double y{};
+};
+
+double orbitalPeriod()
+{
+    return 2 * M_PI * std::sqrt(std::pow(DISTANCE_CENTER, 3) / (GRAV_CONST * EARTH_MASS));
+}
+
+double netDist(Vector r)
+{
+    return std::sqrt(r.x * r.x + r.y * r.y);
+}
+
+Vector vectorToEarth(Vector r)
+{
+    Vector a;
+    a.x = -(GRAV_CONST * EARTH_MASS * r.x / std::pow(netDist(r), 3));
+    a.y = -(GRAV_CONST * EARTH_MASS * r.y / std::pow(netDist(r), 3));
+    return a;
 }
 
 double initialVelocity()
@@ -30,41 +48,33 @@ double initialVelocity()
     return std::sqrt(GRAV_CONST * EARTH_MASS / DISTANCE_CENTER);
 }
 // Change velocity each dt time step
-void EulerMethodV(double r, double &v, double dt)
+void EulerMethodV(const Vector &r, Vector &v, double dt)
 {
-    v = v + vectorToEarth(r) * dt;
+    Vector a = vectorToEarth(r);
+    v.x = v.x + a.x * dt;
+    v.y = v.y + a.y * dt;
 }
 // Change distance from earth centre each dt time step
-void EulerMethodR(double &r, double v, double dt)
+void EulerMethodR(Vector &r, const Vector &v, double dt)
 {
-    r = r + v * dt;
+    r.x = r.x + v.x * dt;
+    r.y = r.y + v.y * dt;
 }
 
-// this simulation represents a satellite in free fall, outputs velocity and radius at each step.
-// and then finally outputs the time in seconds it took to fall to the ground.
 int main()
 {
     const double dt = 0.1;
     double count = 0.0;
-    double velocity = 0;
-    std::vector<double> time;
-    std::vector<double> position;
-    double distanceCenter{DISTANCE_CENTER};
+    Vector velocity{0, initialVelocity()};
+    Vector position{DISTANCE_CENTER, 0};
+    std::vector<Vector> orbit;
 
-    while (true)
+    while (count < orbitalPeriod())
     {
-        EulerMethodV(distanceCenter, velocity, dt);
-        std::cout << velocity << std::endl;
-        time.push_back(count);
-        EulerMethodR(distanceCenter, velocity, dt);
-        std::cout << distanceCenter << std::endl;
-        position.push_back(distanceCenter);
+        EulerMethodV(position, velocity, dt);
+        EulerMethodR(position, velocity, dt);
+        orbit.push_back(position);
         count += 0.1;
-        if (distanceCenter <= EARTH_RADIUS)
-        {
-            std::cout << count << std::endl;
-            break;
-        }
     }
 
     // CSV file creation
@@ -72,10 +82,10 @@ int main()
     myFile.open("orbitData.csv", std::ios::out);
     if (myFile.is_open())
     {
-        myFile << "time" << ',' << "position" << std::endl;
-        for (int i{}; i < time.size(); ++i)
+        myFile << 'x' << ',' << 'y' << std::endl;
+        for (int i{}; i < orbit.size(); ++i)
         {
-            myFile << time[i] << ',' << position[i] << std::endl;
+            myFile << orbit[i].x << ',' << orbit[i].y << std::endl;
         }
     }
     myFile.close();

@@ -3,6 +3,7 @@ import pandas as pd
 
 data = pd.read_csv("orbitData.csv")
 
-plt.plot(data["time"], data["position"])
+plt.plot(data["x"], data["y"])
+plt.axis('equal')
 plt.grid()
 plt.show()
