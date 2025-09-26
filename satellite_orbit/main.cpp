@@ -1,23 +1,15 @@
-// develop a program to simulate a satellite's orbit around Earth, incorporating orbital mechanics.
-
-// Implement two-body problem solver using numerical integration
 // e.g. Runge-Kutta
 
 // Calculate orbital parameters (semi-majors axis, eccentricity)
 
-// Visualise the orbit in 2D/3D using python-matplotlib
+// Visualise the orbit in 3D using python-matplotlib
 
+#include "constants.h"
 #include <cmath>
 #include <fstream>
 #include <ios>
 #include <iostream>
 #include <vector>
-
-constexpr double EARTH_MASS{5.972e24};       // kg
-constexpr double EARTH_RADIUS{6.371e6};      // m
-constexpr double GRAV_CONST{6.67430e-11};    // m^3 kg^-1 s^-2
-constexpr double DISTANCE_SURFACE{400000.0}; // m from earth surface
-constexpr double DISTANCE_CENTER = (DISTANCE_SURFACE + EARTH_RADIUS);
 
 struct Vector
 {
@@ -25,7 +17,7 @@ struct Vector
     double y{};
 };
 
-double orbitalPeriod()
+const double orbitalPeriod()
 {
     return 2 * M_PI * std::sqrt(std::pow(DISTANCE_CENTER, 3) / (GRAV_CONST * EARTH_MASS));
 }
@@ -63,18 +55,18 @@ void EulerMethodR(Vector &r, const Vector &v, double dt)
 
 int main()
 {
-    const double dt = 0.1;
-    double count = 0.0;
+    const double dt = 0.1; // seconds
+    double time = 0.0;     // seconds
     Vector velocity{0, initialVelocity()};
     Vector position{DISTANCE_CENTER, 0};
     std::vector<Vector> orbit;
 
-    while (count < orbitalPeriod())
+    while (time < orbitalPeriod())
     {
         EulerMethodV(position, velocity, dt);
         EulerMethodR(position, velocity, dt);
         orbit.push_back(position);
-        count += 0.1;
+        time += 0.1;
     }
 
     // CSV file creation
